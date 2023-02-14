@@ -1,8 +1,8 @@
 <mat-card>
   <mat-toolbar color="primary">Curos Disponíveis</mat-toolbar>
 
-  <app-courses-list *ngIf="courses$ | async as courses; else loading" [courses]="courses"
-    (add)="onAdd()"></app-courses-list>
+  <app-courses-list *ngIf="courses$ | async as courses; else loading" [courses]="courses" (add)="onAdd()"
+    (edit)="onEdit($event)"></app-courses-list>
 
   <div class="column-flex mat-elevation-z8">
 

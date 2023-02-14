@@ -15,14 +15,18 @@ export class CoursesService {
 
   list() {
     return this.httpClient.get<Course[]>(this.API)
-    .pipe(
-      first(),
-      delay(1000),
-      tap(courses => console.log(courses))
-    );
+      .pipe(
+        first(),
+        delay(1000),
+        tap(courses => console.log(courses))
+      );
   }
 
-  save(record: Partial<Course>){
+  loadById(id: string) {
+    return this.httpClient.get<Course>(`${this.API}/${id}`);
+  }
+
+  save(record: Partial<Course>) {
     return this.httpClient.post<Course>(this.API, record);
   }
 }
