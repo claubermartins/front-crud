@@ -21,7 +21,7 @@ export class CourseFormComponent implements OnInit {
 
   constructor(private formBuilder: NonNullableFormBuilder,
     private service: CoursesService,
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private location: Location,
     private route: ActivatedRoute) {
   }
@@ -45,12 +45,12 @@ export class CourseFormComponent implements OnInit {
   }
 
   private onSuccess() {
-    this._snackBar.open('Curso Salvo com sucesso', '', { duration: 3000 });
+    this.snackBar.open('Curso Salvo com sucesso', '', { duration: 3000 });
     this.onCancel();
   }
 
   private onError() {
-    this._snackBar.open('Erro ao salvar curso', '', { duration: 3000 });
+    this.snackBar.open('Erro ao salvar curso', '', { duration: 3000 });
   }
 
 }

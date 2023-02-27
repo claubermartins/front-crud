@@ -28,7 +28,7 @@ export class CoursesService {
 
   save(record: Partial<Course>) {
     // console.log(record);
-    if (record._id){
+    if (record._id) {
 
       // console.log('update');
       return this.update(record);
@@ -37,11 +37,15 @@ export class CoursesService {
     return this.create(record);
   }
 
-  private create(record: Partial<Course>){
+  private create(record: Partial<Course>) {
     return this.httpClient.post<Course>(this.API, record).pipe(first());
   }
 
-  private update(record: Partial<Course>){
+  private update(record: Partial<Course>) {
     return this.httpClient.put<Course>(`${this.API}/${record._id}`, record).pipe(first());
+  }
+
+  remove(id: string) {
+    return this.httpClient.delete(`${this.API}/${id}`).pipe(first());
   }
 }
