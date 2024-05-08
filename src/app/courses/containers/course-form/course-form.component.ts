@@ -35,6 +35,7 @@ export class CourseFormComponent implements OnInit {
       name: course.name,
       category: course.category
     });
+    console.log();
   }
 
   onSubmit() {
