@@ -14,6 +14,7 @@ export class FormUtilsService {
       if (control instanceof UntypedFormControl) {
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof UntypedFormGroup || control instanceof UntypedFormArray) {
+        control.markAsTouched({ onlySelf: true });
         this.validateAllFormFields(control);
       }
     });
@@ -38,13 +39,13 @@ export class FormUtilsService {
 
     if (field?.hasError('maxlength')) {
       const requiredLength: number = field.errors ? field.errors['maxlength']['requiredLength'] : 100;
-      return `Tamanho máximo excedido precisa de ${requiredLength} caracteres.`;
+      return `Tamanho máximo excedido de ${requiredLength} caracteres.`;
     }
 
     return 'Campo inválido';
   }
 
-  getFormArrayErrorMessage(formGroup: UntypedFormGroup, formArrayName: string,
+  getFormArrayFieldErrorMessage(formGroup: UntypedFormGroup, formArrayName: string,
     fieldName: string, index: number
   ) {
     const formArray = formGroup.get(formArrayName) as UntypedFormArray;
