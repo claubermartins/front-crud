@@ -14,6 +14,7 @@
     [pageIndex]="pageIndex"
     [pageSize]="pageSize"
     [length]="courses.totalElements"
+    (page)="refresh($event)"
     aria-label="Select page of courses">
     </mat-paginator>
   </div>
