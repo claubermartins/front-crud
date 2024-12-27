@@ -1,17 +1,16 @@
 name: CI Workflow for Angular
 
-# Definindo os eventos que disparam o workflow
 on:
   push:
     branches:
-      - test-prod  # Ações ocorrerão apenas quando houver push na branch "test-prod"
+      - test-prod
   pull_request:
     branches:
-      - test-prod  # O workflow também será executado em PRs para a branch "test-prod"
+      - test-prod
 
 jobs:
   start:
-    runs-on: ubuntu-latest  # Runner do GitHub que usará a última versão estável do Ubuntu
+    runs-on: ubuntu-latest
 
     steps:
       # Passo 1: Verificar o código do repositório
@@ -22,7 +21,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'  # Usando a versão do Node.js compatível com o Angular
+          node-version: '18.x'
 
       # Passo 3: Instalar as dependências do projeto
       - name: Install dependencies
@@ -30,5 +29,10 @@ jobs:
 
       # Passo 4: Rodar o servidor de desenvolvimento
       - name: Run Angular development server
-        run: npm run start -- --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.js
-        # "--host 0.0.0.0" permite o acesso externo ao servidor, caso necessário
+        run: npm run start -- --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.js &
+
+      # Passo 5: Verificar se o servidor está funcionando (Health Check)
+      - name: Health Check for Angular server
+        run: |
+          sleep 30  # Espera o servidor Angular iniciar
+          curl --silent --fail http://localhost:4200 || exit 1  # Verifica se o servidor responde na porta 4200
