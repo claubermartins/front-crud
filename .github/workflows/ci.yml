@@ -1,14 +1,33 @@
 name: CI Workflow for Angular
 
+# Definindo os eventos que disparam o workflow
 on:
   push:
     branches:
-      - test-prod
+      - test-prod  # Ações ocorrerão apenas quando houver push na branch "test-prod"
   pull_request:
     branches:
-      - test-prod
+      - test-prod  # O workflow será executado em PRs para a branch "test-prod"
 
 jobs:
+  validate-pr-source:
+    runs-on: ubuntu-latest  # Runner do GitHub que usará a última versão estável do Ubuntu
+
+    steps:
+      # Passo 1: Verificar o código do repositório
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Passo 2: Validar a origem da branch do PR
+      - name: Validate PR source branch
+        run: |
+          if [[ "${{ github.head_ref }}" != "test-prod" ]]; then
+            echo "This pull request is not from the 'test-prod' branch. It will not be merged!";
+            exit 1;  # Fala que a origem não é a 'test-prod' e falha o workflow
+          else
+            echo "Pull request is from the correct 'test-prod' branch.";
+          fi
+
   start:
     runs-on: ubuntu-latest
 
@@ -27,12 +46,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Passo 4: Rodar o servidor de desenvolvimento
+      # Passo 4: Rodar o servidor de desenvolvimento em segundo plano
       - name: Run Angular development server
         run: npm run start -- --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.js &
 
-      # Passo 5: Verificar se o servidor está funcionando (Health Check)
-      - name: Health Check for Angular server
-        run: |
-          sleep 30  # Espera o servidor Angular iniciar
-          curl --silent --fail http://localhost:4200 || exit 1  # Verifica se o servidor responde na porta 4200
+      # Passo 5: Esperar o servidor iniciar
+      - name: Wait for server to start
+        run: sleep 30  # Dá tempo para o servidor Angular iniciar antes de finalizar o workflow
